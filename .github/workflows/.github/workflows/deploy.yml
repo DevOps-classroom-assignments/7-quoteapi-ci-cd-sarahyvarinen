@@ -1,0 +1,30 @@
+name: Deploy on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm test
+
+      - name: RENDER_DEPLOY_HOOK
+        run: curl -X POST "https://api.render.com/deploy/srv-d3hb26ripnbc73d3cplg?key=BF8Gku7GQcI"
